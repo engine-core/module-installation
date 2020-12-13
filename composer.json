@@ -1,0 +1,39 @@
+{
+  "name": "engine-core/module-installation",
+  "description": "提供项目安装、卸载、创建运行环境配置文件等操作",
+  "authors": [
+    {
+      "name": "E-Kevin",
+      "email": "e-kevin@qq.com"
+    }
+  ],
+  "license": "BSD-3-Clause",
+  "homepage": "https://github.com/engine-core/module-installation",
+  "require": {
+    "e-kevin/engine-core": "~1.0.0@dev",
+    "e-kevin/yii-dsn-helper": "~1.0",
+    "kartik-v/yii2-grid": "@dev"
+  },
+  "autoload": {
+    "psr-4": {
+      "EngineCore\\modules\\installation\\": "src"
+    }
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-main": "1.0.x-dev"
+    },
+    "extension-config": {
+      "require": {
+        "backend": {
+          "engine-core/module-backend-extension": "*",
+          "engine-core/theme-bootstrap-v3": "*"
+        }
+      },
+      "app": [
+        "backend",
+        "console"
+      ]
+    }
+  }
+}
