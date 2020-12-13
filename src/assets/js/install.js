@@ -1,5 +1,5 @@
 /*
- * @link https://github.com/EngineCore/module-installation
+ * @link https://github.com/engine-core/module-installation
  * @copyright Copyright (c) 2020 E-Kevin
  * @license BSD 3-Clause License
  */
