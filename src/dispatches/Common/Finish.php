@@ -1,6 +1,6 @@
 <?php
 /**
- * @link https://github.com/EngineCore/module-installation
+ * @link https://github.com/engine-core/module-installation
  * @copyright Copyright (c) 2020 E-Kevin
  * @license BSD 3-Clause License
  */
@@ -11,6 +11,8 @@ use EngineCore\Ec;
 use EngineCore\helpers\ArrayHelper;
 use EngineCore\modules\installation\dispatches\Dispatch;
 use EngineCore\modules\installation\models\FinishForm;
+use Gitter\Client;
+use Gitter\PrettyFormat;
 use Yii;
 
 /**
@@ -30,6 +32,8 @@ class Finish extends Dispatch
         
 //        Ec::dump(Ec::$service->extension->repository->finder->configuration["engine-core/theme-bootstrap-v3"]->getExtensionDependencies(),"engine-core/theme-bootstrap-v3");
 //        Ec::$service->getExtension()->dependent->checkDependencies("engine-core/theme-bootstrap-v3");
+        
+        
         Ec::$service->getExtension()->dependent->getDependenciesStatus($this->controller->module->installer->getExtensions(),'top',false);
         Ec::dump(Ec::$service->getExtension()->dependent->getResult());
 

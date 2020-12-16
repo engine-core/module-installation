@@ -1,9 +1,11 @@
 <?php
 /**
- * @link https://github.com/EngineCore/module-installation
+ * @link https://github.com/engine-core/module-installation
  * @copyright Copyright (c) 2020 E-Kevin
  * @license BSD 3-Clause License
  */
+
+declare(strict_types=1);
 
 namespace EngineCore\modules\installation\helpers;
 
@@ -43,21 +45,21 @@ class InstallerHelper extends BaseObject
     
     /**
      * @var array 默认需要安装的扩展
-     * 可用配置键名有：
+     * 可用键名有：
      * `version`: 指定安装的版本
      * `app`: 指定在哪个app应用里安装
      */
     public $defaultExtensions = [
         // modules模块扩展
         'engine-core/module-backend-extension' => [ // 必须安装，用于管理系统扩展模块
-            'version' => 'dev-master',
+            'version' => 'dev-main',
         ],
         // controllers控制器扩展
-        'engine-core/controller-backend-site'  => '*',
-        'engine-core/controller-frontend-site' => '*',
+        'engine-core/controller-backend-site'  => '*', // 后台首页
+        'engine-core/controller-frontend-site' => '*', // 前台首页
         // themes主题扩展
         'engine-core/theme-bootstrap-v3'       => [ // 基础主题
-            'version' => 'dev-master',
+            'version' => 'dev-main',
             'app'     => ['backend', 'frontend'],
         ],
     ];
@@ -97,7 +99,7 @@ class InstallerHelper extends BaseObject
      *
      * @return bool
      */
-    public function getLock()
+    public function getLock(): bool
     {
         return FileHelper::createFile($this->getLockFile(), 'locked');
     }
@@ -175,7 +177,7 @@ class InstallerHelper extends BaseObject
      *
      * @return array
      */
-    public function getConfig(string $id, $type = 'components')
+    public function getConfig(string $id, $type = 'components'): array
     {
         $data = Ec::$service->getSystem()->getCache()->getComponent()->get(InstallationModule::CACHE_CONFIG) ?: [];
         
