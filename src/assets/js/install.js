@@ -38,7 +38,7 @@ $(function () {
                 if (typeof data.info === 'object') {
                     for (var item in data.info) {
                         if (len >= 2) {
-                            info += i + ') ' + data.info[item] + '</br>';
+                            info += i + ') ' + data.info[item] + '<br/>';
                             ++i;
                         } else {
                             info += data.info[item];
@@ -48,6 +48,19 @@ $(function () {
                     info = data.info;
                 }
                 $("#msgBox").modal("show").find(".modal-body").html(info);
+
+                var interval = setInterval(function () {
+                    var time = --data.waitSecond;
+                    if (time <= 0) {
+                        if (null !== data.jumpUrl) {
+                            location.href = data.jumpUrl;
+                        }
+                        clearInterval(interval);
+                    }
+                }, 1000);
+                window.stop = function () {
+                    clearInterval(interval);
+                };
             }
         });
     });

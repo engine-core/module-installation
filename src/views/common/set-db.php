@@ -5,6 +5,8 @@
  * @license BSD 3-Clause License
  */
 
+/* @var \EngineCore\modules\installation\models\DatabaseForm $model */
+
 $this->title = '数据库设置';
 $form = \yii\widgets\ActiveForm::begin([
     'id'      => 'install-form',

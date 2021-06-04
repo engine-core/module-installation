@@ -1,22 +1,25 @@
 <?php
 /**
- * @link https://github.com/engine-core/module-installation
+ * @link      https://github.com/engine-core/module-installation
  * @copyright Copyright (c) 2020 E-Kevin
- * @license BSD 3-Clause License
+ * @license   BSD 3-Clause License
  */
+
+declare(strict_types=1);
 
 namespace EngineCore\modules\installation;
 
 use EngineCore\Ec;
+use Yii;
 use yii\base\InvalidConfigException;
 
 /**
  * Class StepTrait
  *
- * @property array  $stepFlow 安装步骤流程
- * @property string $nextStep 下一步
- * @property string $prevStep 前一步
- * @property array  $step 安装步骤详情数据，只读
+ * @property array  $stepFlow    安装步骤流程
+ * @property string $nextStep    下一步
+ * @property string $prevStep    前一步
+ * @property array  $step        安装步骤详情数据，只读
  * @property string $currentStep 获取当前第一个未完成的步骤，只读
  *
  * @author E-Kevin <e-kevin@qq.com>
@@ -38,31 +41,35 @@ trait StepTrait
     {
         return [
             'index'             => [
-                'label' => '欢迎页面',
+                'label' => Yii::t('ec/modules/installation', 'Welcome'),
                 'url'   => [$this->id . '/index'],
             ],
             'license-agreement' => [
-                'label' => '许可协议',
+                'label' => Yii::t('ec/modules/installation', 'License agreement'),
                 'url'   => [$this->id . '/license-agreement'],
             ],
             'check-env'         => [
-                'label' => '检查安装条件',
+                'label' => Yii::t('ec/modules/installation', 'Check installation conditions'),
                 'url'   => [$this->id . '/check-env'],
             ],
+            'set-site'          => [
+                'label' => Yii::t('ec/modules/installation', 'Set site'),
+                'url'   => [$this->id . '/set-site'],
+            ],
             'set-db'            => [
-                'label' => '数据库设置',
+                'label' => Yii::t('ec/modules/installation', 'Set database'),
                 'url'   => [$this->id . '/set-db'],
             ],
             'extension-manager' => [
-                'label' => '扩展安装',
+                'label' => Yii::t('ec/modules/installation', 'Extension manager'),
                 'url'   => [$this->id . '/extension-manager'],
             ],
-//            'set-admin'         => [
-//                'label' => '管理员设置',
-//                'url'   => [$this->id . '/set-admin'],
-//            ],
+            'extension-detail'  => [
+                'label' => Yii::t('ec/modules/installation', 'Extension detail'),
+                'url'   => [$this->id . '/extension-detail'],
+            ],
             'finish'            => [
-                'label' => '完成',
+                'label' => Yii::t('ec/modules/installation', 'Finish'),
                 'url'   => [$this->id . '/finish'],
             ],
         ];
@@ -133,6 +140,15 @@ trait StepTrait
     }
     
     /**
+     * 重置安装步骤数据
+     */
+    public function resetStep()
+    {
+        $this->_stepCache = null;
+        Ec::$service->getSystem()->getCache()->getComponent()->delete(Module::CACHE_STEP);
+    }
+    
+    /**
      * 获取当前第一个未完成的步骤
      *
      * @return string
@@ -164,6 +180,21 @@ trait StepTrait
         foreach ((array)$step as $value) {
             if (isset($this->step[$value])) {
                 $this->_stepCache[$value] = true;
+            }
+        }
+        Ec::$service->getSystem()->getCache()->getComponent()->set(Module::CACHE_STEP, $this->_stepCache);
+    }
+    
+    /**
+     * 标记`step`步骤为未完成
+     *
+     * @param array|string $step
+     */
+    public function disableStep($step)
+    {
+        foreach ((array)$step as $value) {
+            if (isset($this->step[$value])) {
+                $this->_stepCache[$value] = false;
             }
         }
         Ec::$service->getSystem()->getCache()->getComponent()->set(Module::CACHE_STEP, $this->_stepCache);

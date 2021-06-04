@@ -1,9 +1,21 @@
-<?php $this->title = '安装完成'; ?>
+<?php
+/**
+ * @link https://github.com/engine-core/module-installation
+ * @copyright Copyright (c) 2020 E-Kevin
+ * @license BSD 3-Clause License
+ */
 
-<p class="lead">安装向导结束后将执行以下操作：</p>
+/**@var array $operations */
 
-<ul>
-    <li>1、自动跳转到后台首页。</li>
-    <li>2、根据所安装的扩展自动生成配置文件。</li>
-    <li>3、出于安全问题，当前安装向导模块将在完成安装步骤后自动卸载。</li>
-</ul>
+use yii\helpers\Html;
+
+$this->title = '安装完成';
+?>
+
+    <p class="lead">安装向导结束后将执行以下操作：</p>
+
+<?= Html::ul($operations, [
+    'item' => function ($item, $index) {
+        return Html::tag('li', ++$index . '、' . Html::encode($item));
+    },
+]); ?>

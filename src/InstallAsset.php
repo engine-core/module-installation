@@ -5,10 +5,17 @@
  * @license BSD 3-Clause License
  */
 
+declare(strict_types=1);
+
 namespace EngineCore\modules\installation;
 
 use yii\web\AssetBundle;
 
+/**
+ * Class InstallAsset
+ *
+ * @author E-Kevin <e-kevin@qq.com>
+ */
 class InstallAsset extends AssetBundle
 {
     

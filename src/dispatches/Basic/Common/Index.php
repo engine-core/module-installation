@@ -1,13 +1,15 @@
 <?php
 /**
  * @link https://github.com/engine-core/module-installation
- * @copyright Copyright (c) 2020 E-Kevin
+ * @copyright Copyright (c) 2021 E-Kevin
  * @license BSD 3-Clause License
  */
 
-namespace EngineCore\modules\installation\dispatches\Common;
+declare(strict_types=1);
 
-use EngineCore\modules\installation\dispatches\Dispatch;
+namespace EngineCore\modules\installation\dispatches\Basic\Common;
+
+use EngineCore\modules\installation\dispatches\Basic\Dispatch;
 use Yii;
 
 /**
@@ -21,14 +23,13 @@ class Index extends Dispatch
     public function run()
     {
         if (Yii::$app->getRequest()->isPost) {
-            $nextStep = $this->controller->nextStep;
             if ($this->controller->isFinishedStep($this->id)) {
                 goto redirect;
             }
             $this->controller->finishStep($this->id);
             redirect:
             
-            return $this->controller->redirect([$nextStep]);
+            return $this->controller->redirect([$this->controller->nextStep]);
         }
         
         return $this->response->render();

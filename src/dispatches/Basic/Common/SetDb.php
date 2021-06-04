@@ -1,14 +1,16 @@
 <?php
 /**
  * @link https://github.com/engine-core/module-installation
- * @copyright Copyright (c) 2020 E-Kevin
+ * @copyright Copyright (c) 2021 E-Kevin
  * @license BSD 3-Clause License
  */
 
-namespace EngineCore\modules\installation\dispatches\Common;
+declare(strict_types=1);
+
+namespace EngineCore\modules\installation\dispatches\Basic\Common;
 
 use EngineCore\Ec;
-use EngineCore\modules\installation\dispatches\Dispatch;
+use EngineCore\modules\installation\dispatches\Basic\Dispatch;
 use EngineCore\modules\installation\models\DatabaseForm;
 use Yii;
 
@@ -27,19 +29,22 @@ class SetDb extends Dispatch
             $this->controller->module->getInstaller(),
         ], DatabaseForm::class);
         
-        $model->loadDefaultValues();
-        
-        if ($model->load(Yii::$app->request->post())) {
-            if ($model->save()) {
-                if (!$this->controller->isFinishedStep($this->id)) {
-                    $this->controller->finishStep($this->id);
+        $request = Yii::$app->request;
+        if ($request->getIsPost()) {
+            if ($model->load($request->post()) && $model->save()) {
+                if ($this->controller->isFinishedStep($this->id)) {
+                    goto redirect;
                 }
+                $this->controller->finishStep($this->id);
+                redirect:
                 
                 return $this->controller->redirect([$this->controller->nextStep]);
             } else {
                 $this->response->error();
             }
         }
+        
+        $model->loadDefaultValues();
         
         return $this->response->setAssign([
             'model' => $model,

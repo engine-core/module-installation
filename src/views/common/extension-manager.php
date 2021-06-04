@@ -5,236 +5,224 @@
  * @license BSD 3-Clause License
  */
 
-/* @var $extensions array */
+/* @var $extensions Configuration */
+/* @var $download array */
+/* @var $circular array */
+/* @var $conflict array */
 
-use EngineCore\Ec;
+/* @var $model \EngineCore\modules\installation\models\ExtensionManageForm */
+
+use EngineCore\enums\AppEnum;
+use EngineCore\extension\repository\configuration\Configuration;
+use kartik\grid\CheckboxColumn;
 use kartik\grid\GridView;
 use yii\data\ArrayDataProvider;
 use yii\helpers\Html;
 
-$this->title = '扩展安装';
-$definitions = Ec::$service->getExtension()->getDependent()->getDefinitions();
+$this->title = '扩展中心';
 ?>
 
-    <div class="page-header">
-        <h1>默认安装以下扩展
-            <small>向导将自动安装扩展所需的数据库迁移文件、系统配置、菜单配置等</small>
-        </h1>
-    </div>
-
-<?php foreach ($extensions as $uniqueName => $row): ?>
-    <?php
-    $target = md5($uniqueName);
-    $open = false;
-    if (isset($definitions[$uniqueName])) {
-        $open = true;
-    }
-    ?>
-    <div class="panel panel-<?= $open ? 'info' : 'danger'; ?>">
-        <div class="panel-heading" data-toggle="collapse" data-target="#<?= $target; ?>" aria-expanded="false"
-             aria-controls="<?= $target; ?>">
-            <h3 class="panel-title">
-                <?= $uniqueName . ' : ' . $row['version']; ?>
-                <span class="pull-right"><?= $open ? '' : ' 未下载' ?></span>
-            </h3>
-        </div>
-        <?php if ($open): ?>
-            <div class="collapse in" id="<?= $target; ?>">
-                <div class="panel-body">
-                    <p><?= $row['description']; ?></p>
-                    <div class="nav-tabs-custom">
-                        <ul class="nav nav-tabs">
-                            <?php
-                            echo Html::tag('li', Html::a('扩展依赖', "#{$target}-extensionDependencies", ['data-toggle' => 'tab']), [
-                                'class' => 'active',
-                            ]);
-                            echo Html::tag('li', Html::a('composer依赖', "#{$target}-composerDependencies", ['data-toggle' => 'tab']));
-                            ?>
-                        </ul>
-                        <!-- extension -->
-                        <div class="tab-content">
-                            <div class="active tab-pane" id="<?= $target; ?>-extensionDependencies">
-                                <?php
-                                if (empty($row['extensionDependencies'])) {
-                                    $dataProvider = new ArrayDataProvider([
-                                        'allModels' => [],
-                                    ]);
-                                    echo GridView::widget([
-                                        'dataProvider'     => $dataProvider,
-                                        'layout'           => "{items}",
-                                        'emptyText'        => '不存在任何依赖关系',
-                                        'hover'            => true,
-                                        'bordered'         => false,
-                                        'emptyTextOptions' => ['class' => 'text-center text-muted'],
-                                    ]);
-                                } else {
-                                    foreach ($row['extensionDependencies'] as $app => $v) {
-                                        $html = <<<HTML
-<div style="margin-top:10px">
-    <div class="panel panel-default">
-      <div class="panel-heading">%s</div>
-      <div class="panel-body">
-        %s
-      </div>
-    </div>
+<div class="page-header">
+    <h1>本地扩展
+        <small>请选择需要安装的扩展，无法更改默认需要安装和已经安装的扩展</small>
+    </h1>
 </div>
-HTML;
-                                        $dataProvider = new ArrayDataProvider([
-                                            'allModels'  => $v,
-                                            'pagination' => [
-                                                'pageSize' => -1, //不使用分页
-                                            ],
-                                        ]);
-                                        $content = GridView::widget([
-                                            'dataProvider'     => $dataProvider,
-                                            'layout'           => "{items}",
-                                            'emptyText'        => '不存在任何依赖关系',
-                                            'hover'            => true,
-                                            'bordered'         => false,
-                                            'emptyTextOptions' => ['class' => 'text-center text-muted'],
-                                            'rowOptions'       => function ($model, $key, $index, $grid) {
-                                                $options = [];
-                                                if (
-                                                    ($model['installed'] || $model['downloaded'])
-                                                    && !Ec::$service->getSystem()->getVersion()->compare($model['localVersion'], $model['requireVersion'])
-                                                ) {
-                                                    $options = ['class' => 'warning'];
-                                                }
-                                                
-                                                return $options;
-                                            },
-                                            'columns'          => [
-                                                [
-                                                    'label'     => '名称',
-                                                    'attribute' => 'name',
-                                                ],
-                                                [
-                                                    'label'     => '描述',
-                                                    'attribute' => 'description',
-                                                ],
-                                                [
-                                                    'label'  => '当前版本',
-                                                    'format' => 'raw',
-                                                    'value'  => function ($model) {
-                                                        if (
-                                                            ($model['installed'] || $model['downloaded'])
-                                                            && !Ec::$service->getSystem()->getVersion()->compare($model['localVersion'], $model['requireVersion'])
-                                                        ) {
-                                                            return Html::tag('div', Html::tag('span', '版本冲突',
-                                                                ['class' => 'text-danger']), [
-                                                                'data-toggle' => 'tooltip',
-                                                                'title'       => nl2br('当前版本' . $model['localVersion']
-                                                                        . '不符合所需的依赖版本要求 ' . $model['requireVersion'])
-                                                                    . '。在解决冲突前，扩展功能可能存在不兼容或无法使用的情况。',
-                                                                'data-html'   => 'true',
-                                                            ]);
-                                                        }
-                                                        
-                                                        return $model['localVersion'];
-                                                    },
-                                                ],
-                                                [
-                                                    'label'     => '依赖版本',
-                                                    'attribute' => 'requireVersion',
-                                                ],
-                                                [
-                                                    'label'     => '应用环境',
-                                                    'attribute' => 'requireApp',
-                                                ],
-                                                [
-                                                    'class'     => 'kartik\grid\BooleanColumn',
-                                                    'attribute' => 'downloaded',
-                                                    'label'     => '已下载',
-                                                ],
-                                                [
-                                                    'class'     => 'kartik\grid\BooleanColumn',
-                                                    'attribute' => 'installed',
-                                                    'label'     => '已安装',
-                                                ],
-                                            ],
-                                        ]);
-                                        echo sprintf($html, '在 ' . $app . ' 应用安装时需要依赖以下扩展', $content);
-                                    }
-                                }
-                                ?>
-                            </div>
-                            <!-- /.tab-pane -->
-                            <!-- composer -->
-                            <div class="tab-pane" id="<?= $target; ?>-composerDependencies">
-                                <?php
-                                $dataProvider = new ArrayDataProvider([
-                                    'allModels'  => $row['composerDependencies'],
-                                    'pagination' => [
-                                        'pageSize' => -1, //不使用分页
-                                    ],
-                                ]);
-                                echo GridView::widget([
-                                    'dataProvider'     => $dataProvider,
-                                    'layout'           => "{items}",
-                                    'emptyText'        => '不存在任何依赖关系',
-                                    'hover'            => true,
-                                    'bordered'         => false,
-                                    'emptyTextOptions' => ['class' => 'text-center text-muted'],
-                                    'rowOptions'       => function ($model, $key, $index, $grid) {
-                                        $options = [];
-                                        if ($model['installed']
-                                            && !Ec::$service->getSystem()->getVersion()->compare($model['localVersion'], $model['requireVersion'])
-                                        ) {
-                                            $options = ['class' => 'warning'];
-                                        }
-                                        
-                                        return $options;
-                                    },
-                                    'columns'          => [
-                                        [
-                                            'label'     => '名称',
-                                            'attribute' => 'name',
-                                        ],
-                                        [
-                                            'label'     => '描述',
-                                            'attribute' => 'description',
-                                        ],
-                                        [
-                                            'label'  => '当前版本',
-                                            'format' => 'raw',
-                                            'value'  => function ($model) {
-                                                if ($model['installed']
-                                                    && !Ec::$service->getSystem()->getVersion()->compare($model['localVersion'], $model['requireVersion'])) {
-                                                    return Html::tag('div', Html::tag('span',
-                                                        '版本冲突',
-                                                        ['class' => 'text-danger']), [
-                                                        'data-toggle' => 'tooltip',
-                                                        'title'       => nl2br('当前版本' . $model['localVersion']
-                                                                . '不符合所需的依赖版本要求 ' . $model['requireVersion'])
-                                                            . '。在解决冲突前，扩展功能可能存在不兼容或无法使用的情况。',
-                                                        'data-html'   => 'true',
-                                                    ]);
-                                                }
-                                                
-                                                return $model['localVersion'];
-                                            },
-                                        ],
-                                        [
-                                            'label'     => '依赖版本',
-                                            'attribute' => 'requireVersion',
-                                        ],
-                                        [
-                                            'class'     => 'kartik\grid\BooleanColumn',
-                                            'attribute' => 'installed',
-                                            'label'     => '已安装',
-                                        ],
-                                    ],
-                                ]); ?>
-                            </div>
-                            <!-- /.tab-pane -->
-                        </div>
-                        <!-- /.tab-content -->
-                    </div>
-                </div>
-            </div>
-        <?php endif; ?>
+
+<?php
+$columns = [
+    [
+        'class'            => CheckboxColumn::class,
+        'name'             => Html::getInputName($model, 'extension'),
+        'checkboxOptions'  => function ($model, $key, $index, $column) {
+            $options['checked'] = $model['checked'];
+            $options['disabled'] = $model['disabled'];
+            
+            return $options;
+        },
+        'rowSelectedClass' => GridView::TYPE_SUCCESS,
+    ],
+    [
+        'label'     => '名称',
+        'attribute' => 'name',
+    ],
+    [
+        'label'     => '描述',
+        'attribute' => 'description',
+    ],
+    [
+        'label'          => '当前版本',
+        'attribute'      => 'version',
+        'contentOptions' => [
+            'style' => 'text-align:center;',
+        ],
+    ],
+];
+
+foreach (AppEnum::list() as $app => $title) {
+    $columns[] = [
+        'label'          => $title,
+        'format'         => 'raw',
+        'contentOptions' => [
+            'style' => 'text-align:center;',
+        ],
+        'value'          => function ($m, $key, $index, $column) use ($app, $model) {
+            /** @var Configuration $m */
+            $html = '';
+            if (in_array($app, $m['app'])) {
+                $name = Html::getInputName($model, 'app') . "[{$key}][]";
+                $options['value'] = $app;
+                $options['checked'] = in_array($app, $m['checkedApp']);
+                $options['disabled'] = in_array($app, $m['disabledApp']);
+                $html = Html::checkbox($name, false, $options);
+            }
+            
+            return $html;
+        },
+    ];
+}
+
+$dataProvider = new ArrayDataProvider([
+    'allModels'  => $extensions,
+    'pagination' => [
+        'pageSize' => -1, //不使用分页
+    ],
+]);
+
+$form = \yii\widgets\ActiveForm::begin([
+    'id' => 'install-form',
+]);
+
+echo GridView::widget([
+    'dataProvider'     => $dataProvider,
+    'layout'           => "{items}",
+    'emptyText'        => '不存在任何扩展',
+    'hover'            => true,
+    'bordered'         => false,
+    'emptyTextOptions' => ['class' => 'text-center text-muted'],
+    'columns'          => $columns,
+]);
+
+\yii\widgets\ActiveForm::end();
+?>
+
+<?php if (!empty($download)): ?>
+    <div class="page-header">
+        <h1>下载扩展
+            <small>以下为需要下载的扩展</small>
+        </h1>
     </div>
     
     <?php
-endforeach;
-?>
+    $dataProvider = new ArrayDataProvider([
+        'allModels'  => $download,
+        'pagination' => [
+            'pageSize' => -1, //不使用分页
+        ],
+    ]);
+    
+    $columns = [
+        [
+            'label'     => '名称',
+            'attribute' => 'name',
+        ],
+        [
+            'label'     => '请求主体',
+            'attribute' => 'parent',
+        ],
+        [
+            'label'     => '版本规则',
+            'attribute' => 'version',
+        ],
+    ];
+    
+    echo GridView::widget([
+        'dataProvider'     => $dataProvider,
+        'layout'           => "{items}",
+        'emptyText'        => '不存在任何扩展',
+        'hover'            => true,
+        'bordered'         => false,
+        'emptyTextOptions' => ['class' => 'text-center text-muted'],
+        'columns'          => $columns,
+    ]);
+    ?>
+<?php endif; ?>
+
+<?php if (!empty($circular)): ?>
+    <div class="page-header">
+        <h1>无限依赖
+            <small>以下扩展存在无限循环依赖关系</small>
+        </h1>
+    </div>
+    
+    <?php
+    $dataProvider = new ArrayDataProvider([
+        'allModels'  => $circular,
+        'pagination' => [
+            'pageSize' => -1, //不使用分页
+        ],
+    ]);
+    
+    $columns = [
+        [
+            'label'     => '名称',
+            'attribute' => 'name',
+        ],
+        [
+            'label'     => '依赖链',
+            'attribute' => 'chain',
+        ],
+    ];
+    
+    echo GridView::widget([
+        'dataProvider'     => $dataProvider,
+        'layout'           => "{items}",
+        'emptyText'        => '不存在任何扩展',
+        'hover'            => true,
+        'bordered'         => false,
+        'emptyTextOptions' => ['class' => 'text-center text-muted'],
+        'columns'          => $columns,
+    ]);
+    ?>
+<?php endif; ?>
+
+<?php if (!empty($conflict)): ?>
+    <div class="page-header">
+        <h1>版本冲突
+            <small>以下扩展存在版本冲突</small>
+        </h1>
+    </div>
+    
+    <?php
+    $dataProvider = new ArrayDataProvider([
+        'allModels'  => $conflict,
+        'pagination' => [
+            'pageSize' => -1, //不使用分页
+        ],
+    ]);
+    
+    $columns = [
+        [
+            'label'     => '名称',
+            'attribute' => 'name',
+        ],
+        [
+            'label'     => '版本规则',
+            'attribute' => 'requireVersion',
+        ],
+        [
+            'label'     => '当前版本',
+            'attribute' => 'version',
+        ],
+    ];
+    
+    echo GridView::widget([
+        'dataProvider'     => $dataProvider,
+        'layout'           => "{items}",
+        'emptyText'        => '不存在任何扩展',
+        'hover'            => true,
+        'bordered'         => false,
+        'emptyTextOptions' => ['class' => 'text-center text-muted'],
+        'columns'          => $columns,
+    ]);
+    ?>
+<?php endif; ?>

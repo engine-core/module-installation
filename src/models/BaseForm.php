@@ -5,6 +5,8 @@
  * @license BSD 3-Clause License
  */
 
+declare(strict_types=1);
+
 namespace EngineCore\modules\installation\models;
 
 use EngineCore\base\Model;

@@ -9,6 +9,7 @@
 
 /* @var $content string */
 
+use EngineCore\Ec;
 use EngineCore\widgets\FlashAlert;
 use EngineCore\widgets\Issue;
 use yii\helpers\Html;
@@ -33,22 +34,43 @@ use yii\widgets\Menu;
         'name'    => 'viewport',
         'content' => 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no',
     ]);
+    $this->registerMetaTag([
+        'name'    => 'description',
+        'content' => Html::encode(Ec::$service->getSystem()->getSetting()->get('SITE_DESCRIPTION')),
+    ], 'description');
+    $this->registerMetaTag([
+        'name'    => 'keywords',
+        'content' => Html::encode(Ec::$service->getSystem()->getSetting()->get('SITE_KEYWORD')),
+    ], 'keywords');
     echo Html::csrfMetaTags();
-    echo Html::tag('title', Html::encode($this->title));
+    $title = Ec::$service->getSystem()->getSetting()->get('SITE_TITLE');
+    $title = $title ? $title . ' - ' . $this->title : $this->title;
+    echo Html::tag('title', Html::encode($title));
     $css = <<<css
         .list-group-item {
             border: 0;
             text-align: center;
         }
-
         .list-group-item:first-child {
             border-top-left-radius: 0;
             border-top-right-radius: 0;
         }
-
         .list-group-item:last-child {
             border-bottom-right-radius: 0;
             border-bottom-left-radius: 0;
+        }
+        .list-group-item.active > a {
+            color:#ffffff;
+        }
+        .list-group-item > a {
+            color:#333333;
+        }
+        .list-group-item:hover, .list-group-item:hover > a,
+        .list-group-item.active, .list-group-item.active:hover, .list-group-item.active:focus {
+            z-index: 2;
+            color: #fff;
+            background-color: #337ab7;
+            border-color: #337ab7;
         }
 css;
     $this->registerCss($css, ['type' => 'text/css']);
@@ -65,14 +87,14 @@ css;
         ];
     }
     $menu = [
-        "options"      => [
+        "options"     => [
             "class" => "list-group",
         ],
-        "itemOptions"  => [
+        "itemOptions" => [
             "class" => "list-group-item",
         ],
-        "linkTemplate" => '{label}',
-        "items"        => $items,
+//        "linkTemplate" => '{label}',
+        "items"       => $items,
     ];
     ?>
 </head>
@@ -116,10 +138,17 @@ css;
                 </div>
                 <?= Issue::widget() ?>
             </div>
-            <div class="panel-footer clearfix">
-                <h3 class="panel-title pull-left"><?= Yii::$app->name ?></h3>
-                <div class="pull-right">
-                    EngineCore Version <strong><?= \EngineCore\Ec::getVersion(); ?></strong>
+            <div class="panel-footer clearfix text-muted">
+                <div class="col-md-4">
+                    <h3 class="panel-title pull-left"><?= Yii::$app->name ?></h3>
+                </div>
+                <div class="col-md-4">
+                    <div class="text-center">越被嘲笑的理想，就越有被实现的价值</div>
+                </div>
+                <div class="col-md-4">
+                    <div class="pull-right">
+                        EngineCore Version <strong><?= \EngineCore\Ec::getVersion(); ?></strong>
+                    </div>
                 </div>
             </div>
         </div>
