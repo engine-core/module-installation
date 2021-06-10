@@ -1,7 +1,7 @@
 <?php
 /**
  * @link https://github.com/engine-core/module-installation
- * @copyright Copyright (c) 2021 E-Kevin
+ * @copyright Copyright (c) 2021 engine-core
  * @license BSD 3-Clause License
  */
 
@@ -18,18 +18,18 @@ use yii\db\Connection;
  * Class InstallHelperTrait
  *
  * @property InstallerHelper $installer
- * @property Connection      $db
+ * @property Connection $db
  *
  * @author E-Kevin <e-kevin@qq.com>
  */
 trait InstallHelperTrait
 {
-    
+
     /**
      * @var InstallerHelper
      */
     private $_installer;
-    
+
     /**
      * 获取安装助手类
      *
@@ -40,10 +40,10 @@ trait InstallHelperTrait
         if (null === $this->_installer) {
             $this->_installer = Ec::createObject(InstallerHelper::class, [], InstallerHelper::class);
         }
-        
+
         return $this->_installer;
     }
-    
+
     /**
      * 获取数据库连接组件
      *
@@ -53,7 +53,7 @@ trait InstallHelperTrait
     {
         return $this->getInstaller()->getDb();
     }
-    
+
     /**
      * 初始化安装环境
      */
@@ -75,5 +75,5 @@ trait InstallHelperTrait
             Ec::$service->getExtension()->getEnvironment()->flushMenuFile($menus);
         }
     }
-    
+
 }

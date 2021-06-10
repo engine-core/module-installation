@@ -1,7 +1,7 @@
 <?php
 /**
  * @link https://github.com/engine-core/module-installation
- * @copyright Copyright (c) 2021 E-Kevin
+ * @copyright Copyright (c) 2021 engine-core
  * @license BSD 3-Clause License
  */
 

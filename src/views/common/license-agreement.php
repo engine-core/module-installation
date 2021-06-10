@@ -1,7 +1,7 @@
 <?php
 /**
  * @link https://github.com/engine-core/module-installation
- * @copyright Copyright (c) 2020 E-Kevin
+ * @copyright Copyright (c) 2021 engine-core
  * @license BSD 3-Clause License
  */
 
@@ -20,14 +20,14 @@ $this->title = '许可协议';
     ],
 ]); ?>
 
-    <?php echo $license; ?>
+<?php echo $license; ?>
 
     <div class="checkbox">
         <?= Html::checkbox(
             'license',
             $this->context->isFinishedStep($this->context->action->id),
             [
-                'label'    => '<strong>同意并签署安装协议</strong>',
+                'label' => '<strong>同意并签署安装协议</strong>',
                 'disabled' => $this->context->isFinishedStep($this->context->action->id),
             ]
         ); ?>

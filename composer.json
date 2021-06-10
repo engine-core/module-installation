@@ -33,7 +33,8 @@
         "backend": {
           "engine-core/config-system": {
             "app": "common"
-          }
+          },
+          "engine-core/theme-basic": "*"
         },
         "console": {
           "engine-core/config-system": {

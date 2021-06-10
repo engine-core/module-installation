@@ -1,7 +1,7 @@
 <?php
 /**
  * @link https://github.com/engine-core/module-installation
- * @copyright Copyright (c) 2021 E-Kevin
+ * @copyright Copyright (c) 2021 engine-core
  * @license BSD 3-Clause License
  */
 
@@ -21,28 +21,28 @@ use Yii;
  */
 class Finish extends Dispatch
 {
-    
+
     public function run()
     {
         if (false === $this->controller->module->getInstaller()->validate()) {
             $this->controller->disableStep('extension-manager');
-            
+
             return $this->controller->redirect(['extension-manager']);
         }
-        
+
         if (Yii::$app->getRequest()->isPost) {
             /** @var FinishForm $model */
             $model = Ec::createObject(FinishForm::class, [
                 $this->controller->module->getInstaller(),
             ], FinishForm::class);
-            
+
             if ($model->save()) {
                 return $this->controller->goHome();
             } else {
                 $this->response->error();
             }
         }
-        
+
         return $this->response->setAssign([
             'operations' => [
                 Yii::t('ec/modules/installation', 'Automatically jump to the backend home page.'),
@@ -53,5 +53,5 @@ class Finish extends Dispatch
             ],
         ])->render();
     }
-    
+
 }

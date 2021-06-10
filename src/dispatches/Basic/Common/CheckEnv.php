@@ -1,7 +1,7 @@
 <?php
 /**
  * @link https://github.com/engine-core/module-installation
- * @copyright Copyright (c) 2021 E-Kevin
+ * @copyright Copyright (c) 2021 engine-core
  * @license BSD 3-Clause License
  */
 
@@ -20,27 +20,27 @@ use Yii;
  */
 class CheckEnv extends Dispatch
 {
-    
+
     public function run()
     {
         $env = new EnvironmentHelper();
-        
+
         if (Yii::$app->getRequest()->isPost) {
             if ($this->controller->isFinishedStep($this->id)) {
                 goto redirect;
             }
             $this->controller->finishStep($this->id);
             redirect:
-            
+
             return $this->controller->redirect([$this->controller->nextStep]);
         }
-        
+
         return $this->response->setAssign([
-            'summary'      => $env->checker->getResult()['summary'],
+            'summary' => $env->checker->getResult()['summary'],
             'requirements' => $env->checker->getResult()['requirements'],
-            'serverInfo'   => $env->checker->getServerInfo(),
-            'nowDate'      => $env->checker->getNowDate(),
+            'serverInfo' => $env->checker->getServerInfo(),
+            'nowDate' => $env->checker->getNowDate(),
         ])->render();
     }
-    
+
 }

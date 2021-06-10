@@ -1,7 +1,7 @@
 <?php
 /**
  * @link https://github.com/engine-core/module-installation
- * @copyright Copyright (c) 2020 E-Kevin
+ * @copyright Copyright (c) 2021 engine-core
  * @license BSD 3-Clause License
  */
 
@@ -35,12 +35,12 @@ use yii\web\Application;
  */
 class InstalledBehavior extends Behavior
 {
-    
+
     /**
      * @var \EngineCore\modules\installation\Module
      */
     public $owner;
-    
+
     /**
      * {@inheritdoc}
      */
@@ -50,7 +50,7 @@ class InstalledBehavior extends Behavior
             Module::EVENT_BEFORE_ACTION => 'isInstalled',
         ];
     }
-    
+
     /**
      * 是否已经安装
      *
@@ -63,5 +63,5 @@ class InstalledBehavior extends Behavior
             Yii::$app->end();
         }
     }
-    
+
 }

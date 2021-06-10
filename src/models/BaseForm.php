@@ -1,7 +1,7 @@
 <?php
 /**
  * @link https://github.com/engine-core/module-installation
- * @copyright Copyright (c) 2020 E-Kevin
+ * @copyright Copyright (c) 2021 engine-core
  * @license BSD 3-Clause License
  */
 
@@ -21,17 +21,17 @@ use EngineCore\modules\installation\helpers\InstallerHelper;
  */
 class BaseForm extends Model
 {
-    
+
     /**
      * @var InstallerHelper 安装助手类
      */
     private $_installer;
-    
+
     /**
      * BaseForm constructor.
      *
      * @param InstallerHelper $installer
-     * @param array           $config
+     * @param array $config
      *
      * @author E-Kevin <e-kevin@qq.com>
      */
@@ -40,7 +40,7 @@ class BaseForm extends Model
         $this->_installer = $installer;
         parent::__construct($config);
     }
-    
+
     /**
      * 获取安装助手类
      *
@@ -50,5 +50,5 @@ class BaseForm extends Model
     {
         return $this->_installer;
     }
-    
+
 }

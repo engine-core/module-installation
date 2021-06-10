@@ -1,7 +1,7 @@
 <?php
 /**
  * @link https://github.com/engine-core/module-installation
- * @copyright Copyright (c) 2021 E-Kevin
+ * @copyright Copyright (c) 2021 engine-core
  * @license BSD 3-Clause License
  */
 
@@ -21,14 +21,14 @@ use Yii;
  */
 class SetSite extends Dispatch
 {
-    
+
     public function run()
     {
         /** @var SetSiteForm $model */
         $model = Ec::createObject(SetSiteForm::class, [
             $this->controller->module->getInstaller(),
         ], SetSiteForm::class);
-    
+
         $request = Yii::$app->request;
         if ($request->getIsPost()) {
             if ($model->load($request->post()) && $model->save()) {
@@ -37,18 +37,18 @@ class SetSite extends Dispatch
                 }
                 $this->controller->finishStep($this->id);
                 redirect:
-                
+
                 return $this->controller->redirect([$this->controller->nextStep]);
             } else {
                 $this->response->error();
             }
         }
-        
+
         $model->loadDefaultValues();
-        
+
         return $this->response->setAssign([
             'model' => $model,
         ])->render();
     }
-    
+
 }

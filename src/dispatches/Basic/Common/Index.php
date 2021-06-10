@@ -1,7 +1,7 @@
 <?php
 /**
  * @link https://github.com/engine-core/module-installation
- * @copyright Copyright (c) 2021 E-Kevin
+ * @copyright Copyright (c) 2021 engine-core
  * @license BSD 3-Clause License
  */
 
@@ -19,7 +19,7 @@ use Yii;
  */
 class Index extends Dispatch
 {
-    
+
     public function run()
     {
         if (Yii::$app->getRequest()->isPost) {
@@ -28,11 +28,11 @@ class Index extends Dispatch
             }
             $this->controller->finishStep($this->id);
             redirect:
-            
+
             return $this->controller->redirect([$this->controller->nextStep]);
         }
-        
+
         return $this->response->render();
     }
-    
+
 }

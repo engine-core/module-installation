@@ -1,7 +1,7 @@
 <?php
 /**
  * @link https://github.com/engine-core/module-installation
- * @copyright Copyright (c) 2021 E-Kevin
+ * @copyright Copyright (c) 2021 engine-core
  * @license BSD 3-Clause License
  */
 
@@ -31,24 +31,24 @@ use Yii;
  */
 class InstallationController extends Controller
 {
-    
+
     use MigrationTrait, InstallHelperTrait;
-    
+
     /**
      * {@inheritdoc}
      */
     public $defaultAction = 'install';
-    
+
     /**
      * {@inheritdoc}
      */
     public function init()
     {
         parent::init();
-        
+
         $this->initialize();
     }
-    
+
     /**
      * UnInstall the project.
      *
@@ -60,7 +60,7 @@ class InstallationController extends Controller
         if (!YII_ENV_DEV) {
             $this->stdout("====== This operation can only be performed in a development environment. ======\n",
                 Console::FG_YELLOW);
-            
+
             return ExitCode::OK;
         }
         if ($this->confirm(
@@ -83,10 +83,10 @@ class InstallationController extends Controller
             $this->stdout('Action was cancelled by user. Nothing has been performed.');
         }
         $this->stdout("\n");
-        
+
         return ExitCode::OK;
     }
-    
+
     /**
      * Start the installation of the project.
      *
@@ -97,25 +97,25 @@ class InstallationController extends Controller
         // 仅开发环境下可执行该操作
         if (!YII_ENV_DEV) {
             $this->stdout("====== This operation can only be performed in a development environment. ======\n", Console::FG_YELLOW);
-            
+
             return ExitCode::UNSPECIFIED_ERROR;
         }
         // 检查是否已经安装
         if ($this->getInstaller()->isLocked()) {
             // 安装成功，请不要重复安装
             $this->stdout("====== The installation is successful. Please do not repeat the installation. ======\n", Console::FG_YELLOW);
-            
+
             return ExitCode::UNSPECIFIED_ERROR;
         }
-        
+
         // 授权协议
         $license = file_get_contents($this->getInstaller()->getLicenseFile());
         if (!$this->confirm(Console::markdownToAnsi($license), true)) {
             $this->stdout("Setup wizard exited.\n", Console::FG_YELLOW);
-            
+
             return ExitCode::UNSPECIFIED_ERROR;
         }
-        
+
         // 测试数据库连接
         /** @var DatabaseForm $model */
         $model = Ec::createObject(DatabaseForm::class, [
@@ -126,16 +126,16 @@ class InstallationController extends Controller
         if (false === $res['status']) {
             $this->stdout("Test database connection failed.\n", Console::FG_RED);
             $this->stdout("{$res['info']}.\n", Console::FG_RED);
-            
+
             return ExitCode::UNSPECIFIED_ERROR;
         }
         $this->stdout("====== Test database connection successful. ====== \n", Console::FG_YELLOW);
-        
+
         // 验证已选扩展是否满足依赖关系
         if (ExitCode::OK !== $this->validateCheckedExtensions()) {
             return ExitCode::UNSPECIFIED_ERROR;
         }
-        
+
         // 准备安装的扩展
         $arr = [];
         foreach ($this->getInstaller()->getUnInstallExtension() as $row) {
@@ -157,15 +157,15 @@ class InstallationController extends Controller
             foreach ($arr as $uniqueName => $row) {
                 $this->stdout(sprintf($str, $uniqueName, $row['version'], implode(', ', $row['app'])));
             }
-            
+
             // 确认是否继续
             if (!$this->confirm("\nWould you like to continue?", true)) {
                 $this->stdout("Setup wizard exited.\n", Console::FG_YELLOW);
-                
+
                 return ExitCode::UNSPECIFIED_ERROR;
             }
         }
-        
+
         // 执行安装
         /** @var FinishForm $model */
         $model = Ec::createObject(FinishForm::class, [
@@ -173,18 +173,18 @@ class InstallationController extends Controller
         ], FinishForm::class);
         if (false === $model->save()) {
             $this->stdout("Installation failed.\n", Console::FG_RED);
-            
+
             return ExitCode::UNSPECIFIED_ERROR;
         }
-        
+
         // 安装成功
         $str = "====== Installation is successful. Welcome to use %s. ======\n\n";
         $appName = Ec::$service->getSystem()->getSetting()->get(SettingProviderInterface::SITE_TITLE);
         $this->stdout(sprintf($str, $appName ?: Yii::$app->name), Console::FG_YELLOW);
-        
+
         return ExitCode::OK;
     }
-    
+
     /**
      * Refresh the extended cache that needs to be installed.
      */
@@ -193,7 +193,7 @@ class InstallationController extends Controller
         $this->stdout("====== Successfully refreshed the extension cache that needs to be installed ======\n\n", Console::FG_YELLOW);
         $this->getInstaller()->cache()->delete(Module::CACHE_CHECKED_EXTENSION);
     }
-    
+
     /**
      * Reset the installed extension management category
      */
@@ -202,7 +202,7 @@ class InstallationController extends Controller
         $this->stdout("====== Successfully reset the installed extension management category ======\n\n", Console::FG_YELLOW);
         $this->getInstaller()->cache()->delete(Module::CACHE_EXTENSION_CATEGORY);
     }
-    
+
     /**
      * Validate the dependency of the selected extension.
      *
@@ -213,7 +213,7 @@ class InstallationController extends Controller
         $localConfiguration = Ec::$service->getExtension()->getRepository()->getLocalConfiguration();
         if (empty($localConfiguration)) {
             $this->stderr("The following extension is necessary:\n", Console::FG_RED, Console::UNDERLINE);
-            
+
             $str = Console::renderColoredString(" - %y'%s'%y%n requires version %y%s%y%n.\n");
             foreach ($this->getInstaller()->getCheckedExtensions() as $uniqueName => $row) {
                 $this->stdout(sprintf($str, $uniqueName, $row['version']));
@@ -235,7 +235,7 @@ class InstallationController extends Controller
              */
             $selfChecked = $this->getInstaller()->getCheckedExtensions();
             $selfChecked = $model->parseExtension($selfChecked);
-            
+
             // 检测需要安装的扩展合法性
             if ($model->load($selfChecked, '') && $model->save()) {
                 // 验证扩展是否满足扩展依赖检测
@@ -284,7 +284,7 @@ class InstallationController extends Controller
                             }
                         }
                     };
-                    
+
                     $showDownload();
                     $showConflict();
                     $showCircular();
@@ -301,10 +301,10 @@ class InstallationController extends Controller
                 }
             }
         }
-        
+
         return ExitCode::UNSPECIFIED_ERROR;
     }
-    
+
     /**
      * Delete the install lock file.
      */
@@ -313,7 +313,7 @@ class InstallationController extends Controller
         $this->stdout("* Delete the install lock file.\n", Console::FG_GREEN);
         $this->getInstaller()->unLock();
     }
-    
+
     /**
      * Delete the extension configuration files.
      */
@@ -334,8 +334,8 @@ class InstallationController extends Controller
                 $this->stdout(" {$file}\n");
             }
         }
-        
+
         $this->stdout("\n");
     }
-    
+
 }

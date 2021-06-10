@@ -1,8 +1,8 @@
 <?php
 /**
- * @link      https://github.com/engine-core/module-installation
- * @copyright Copyright (c) 2020 E-Kevin
- * @license   BSD 3-Clause License
+ * @link https://github.com/engine-core/module-installation
+ * @copyright Copyright (c) 2021 engine-core
+ * @license BSD 3-Clause License
  */
 
 declare(strict_types=1);
@@ -11,6 +11,7 @@ namespace EngineCore\modules\installation\behaviors;
 
 use EngineCore\modules\installation\StepTrait;
 use EngineCore\web\Controller;
+use Yii;
 use yii\base\ActionEvent;
 use yii\base\Behavior;
 
@@ -34,12 +35,12 @@ use yii\base\Behavior;
  */
 class GoToCurrentStepBehavior extends Behavior
 {
-    
+
     /**
      * @var Controller|StepTrait
      */
     public $owner;
-    
+
     /**
      * {@inheritdoc}
      */
@@ -49,7 +50,7 @@ class GoToCurrentStepBehavior extends Behavior
             Controller::EVENT_BEFORE_ACTION => 'goto',
         ];
     }
-    
+
     /**
      * 禁止跳转至未完成的步骤，直接返回到第一个未完成的步骤
      *
@@ -62,8 +63,8 @@ class GoToCurrentStepBehavior extends Behavior
         if ((false === $this->owner->isFinishedStep($event->action->id)) && $event->action->id !== $currentStep) {
             $this->owner->action->response
                 ->setJumpUrl([$currentStep])
-                ->error(\Yii::t('ec/modules/installation', 'Unable to jump to an unfinished step. Please complete the current step first.'));
+                ->error(Yii::t('ec/modules/installation', 'Unable to jump to an unfinished step. Please complete the current step first.'));
         }
     }
-    
+
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  * @link https://github.com/engine-core/module-installation
- * @copyright Copyright (c) 2020 E-Kevin
+ * @copyright Copyright (c) 2021 engine-core
  * @license BSD 3-Clause License
  */
 
@@ -57,11 +57,11 @@ $this->title = '扩展详情';
                                         'allModels' => [],
                                     ]);
                                     echo GridView::widget([
-                                        'dataProvider'     => $dataProvider,
-                                        'layout'           => "{items}",
-                                        'emptyText'        => '不存在任何依赖关系',
-                                        'hover'            => true,
-                                        'bordered'         => false,
+                                        'dataProvider' => $dataProvider,
+                                        'layout' => "{items}",
+                                        'emptyText' => '不存在任何依赖关系',
+                                        'hover' => true,
+                                        'bordered' => false,
                                         'emptyTextOptions' => ['class' => 'text-center text-muted'],
                                     ]);
                                 } else {
@@ -77,43 +77,43 @@ $this->title = '扩展详情';
 </div>
 HTML;
                                         $dataProvider = new ArrayDataProvider([
-                                            'allModels'  => $v,
+                                            'allModels' => $v,
                                             'pagination' => [
                                                 'pageSize' => -1, //不使用分页
                                             ],
                                         ]);
                                         $content = GridView::widget([
-                                            'dataProvider'     => $dataProvider,
-                                            'layout'           => "{items}",
-                                            'emptyText'        => '不存在任何依赖关系',
-                                            'hover'            => true,
-                                            'bordered'         => false,
+                                            'dataProvider' => $dataProvider,
+                                            'layout' => "{items}",
+                                            'emptyText' => '不存在任何依赖关系',
+                                            'hover' => true,
+                                            'bordered' => false,
                                             'emptyTextOptions' => ['class' => 'text-center text-muted'],
-                                            'columns'          => [
+                                            'columns' => [
                                                 [
-                                                    'label'     => '名称',
+                                                    'label' => '名称',
                                                     'attribute' => 'name',
                                                 ],
                                                 [
-                                                    'label'     => '描述',
+                                                    'label' => '描述',
                                                     'attribute' => 'description',
                                                 ],
                                                 [
-                                                    'label'     => '当前版本',
+                                                    'label' => '当前版本',
                                                     'attribute' => 'localVersion',
                                                 ],
                                                 [
-                                                    'label'     => '版本规则',
+                                                    'label' => '版本规则',
                                                     'attribute' => 'requireVersion',
                                                 ],
                                                 [
-                                                    'label'     => '应用环境',
+                                                    'label' => '应用环境',
                                                     'attribute' => 'requireApp',
                                                 ],
                                                 [
-                                                    'class'     => 'kartik\grid\BooleanColumn',
+                                                    'class' => 'kartik\grid\BooleanColumn',
                                                     'attribute' => 'installed',
-                                                    'label'     => '已安装',
+                                                    'label' => '已安装',
                                                 ],
                                             ],
                                         ]);
@@ -127,65 +127,65 @@ HTML;
                             <div class="tab-pane" id="<?= $target; ?>-composerDependencies">
                                 <?php
                                 $dataProvider = new ArrayDataProvider([
-                                    'allModels'  => $row['composerDependencies'],
+                                    'allModels' => $row['composerDependencies'],
                                     'pagination' => [
                                         'pageSize' => -1, //不使用分页
                                     ],
                                 ]);
                                 echo GridView::widget([
-                                    'dataProvider'     => $dataProvider,
-                                    'layout'           => "{items}",
-                                    'emptyText'        => '不存在任何依赖关系',
-                                    'hover'            => true,
-                                    'bordered'         => false,
+                                    'dataProvider' => $dataProvider,
+                                    'layout' => "{items}",
+                                    'emptyText' => '不存在任何依赖关系',
+                                    'hover' => true,
+                                    'bordered' => false,
                                     'emptyTextOptions' => ['class' => 'text-center text-muted'],
-                                    'rowOptions'       => function ($model, $key, $index, $grid) {
+                                    'rowOptions' => function ($model, $key, $index, $grid) {
                                         $options = [];
                                         if ($model['installed']
                                             && !Ec::$service->getSystem()->getVersion()->compare($model['localVersion'], $model['requireVersion'])
                                         ) {
                                             $options = ['class' => 'warning'];
                                         }
-                                        
+
                                         return $options;
                                     },
-                                    'columns'          => [
+                                    'columns' => [
                                         [
-                                            'label'     => '名称',
+                                            'label' => '名称',
                                             'attribute' => 'name',
                                         ],
                                         [
-                                            'label'     => '描述',
+                                            'label' => '描述',
                                             'attribute' => 'description',
                                         ],
                                         [
-                                            'label'  => '当前版本',
+                                            'label' => '当前版本',
                                             'format' => 'raw',
-                                            'value'  => function ($model) {
+                                            'value' => function ($model) {
                                                 if ($model['installed']
                                                     && !Ec::$service->getSystem()->getVersion()->compare($model['localVersion'], $model['requireVersion'])) {
                                                     return Html::tag('div', Html::tag('span',
                                                         '版本冲突',
                                                         ['class' => 'text-danger']), [
                                                         'data-toggle' => 'tooltip',
-                                                        'title'       => nl2br('当前版本' . $model['localVersion']
+                                                        'title' => nl2br('当前版本' . $model['localVersion']
                                                                 . '不符合所需的版本规则要求 ' . $model['requireVersion'])
                                                             . '。在解决冲突前，扩展功能可能存在不兼容或无法使用的情况。',
-                                                        'data-html'   => 'true',
+                                                        'data-html' => 'true',
                                                     ]);
                                                 }
-                                                
+
                                                 return $model['localVersion'];
                                             },
                                         ],
                                         [
-                                            'label'     => '版本规则',
+                                            'label' => '版本规则',
                                             'attribute' => 'requireVersion',
                                         ],
                                         [
-                                            'class'     => 'kartik\grid\BooleanColumn',
+                                            'class' => 'kartik\grid\BooleanColumn',
                                             'attribute' => 'installed',
-                                            'label'     => '已安装',
+                                            'label' => '已安装',
                                         ],
                                     ],
                                 ]); ?>
@@ -197,6 +197,6 @@ HTML;
                 </div>
             </div>
         </div>
-    
+
     <?php endforeach; ?>
 <?php endif; ?>

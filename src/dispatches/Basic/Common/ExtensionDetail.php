@@ -1,7 +1,7 @@
 <?php
 /**
  * @link https://github.com/engine-core/module-installation
- * @copyright Copyright (c) 2021 E-Kevin
+ * @copyright Copyright (c) 2021 engine-core
  * @license BSD 3-Clause License
  */
 
@@ -21,37 +21,37 @@ use Yii;
  */
 class ExtensionDetail extends Dispatch
 {
-    
+
     public function run()
     {
         /** @var ExtensionDetailForm $model */
         $model = Ec::createObject(ExtensionDetailForm::class, [
             $this->controller->module->getInstaller(),
         ], ExtensionDetailForm::class);
-        
+
         if (false === $model->getInstaller()->validate()) {
             $this->controller->disableStep('extension-manager');
-            
+
             return $this->controller->redirect(['extension-manager']);
         }
-        
+
         if (Yii::$app->getRequest()->getIsPost()) {
             if ($model->save()) {
                 if (!$this->controller->isFinishedStep($this->id)) {
                     $this->controller->finishStep($this->id);
                 }
-                
+
                 return $this->controller->redirect([$this->controller->nextStep]);
             } else {
                 $this->response->error();
             }
         }
-        
+
         return $this->response->setAssign([
             'extensions' => $this->getExtensions(),
         ])->render();
     }
-    
+
     /**
      * 获取需要安装的扩展，包括被依赖的扩展
      *
@@ -81,8 +81,8 @@ class ExtensionDetail extends Dispatch
                 unset($definitions[$uniqueName]);
             }
         }
-        
+
         return $definitions;
     }
-    
+
 }

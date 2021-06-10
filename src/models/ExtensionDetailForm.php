@@ -1,7 +1,7 @@
 <?php
 /**
  * @link https://github.com/engine-core/module-installation
- * @copyright Copyright (c) 2020 E-Kevin
+ * @copyright Copyright (c) 2021 engine-core
  * @license BSD 3-Clause License
  */
 
@@ -18,7 +18,7 @@ use EngineCore\extension\repository\info\ExtensionInfo;
  */
 class ExtensionDetailForm extends BaseForm
 {
-    
+
     /**
      * 保存，必须在执行前确保已经进行了依赖关系检测，才能确保被依赖的扩展可以被自动添加进需要安装的扩展缓存数据里
      * @see \EngineCore\services\Extension\Dependent::validate()
@@ -46,8 +46,8 @@ class ExtensionDetailForm extends BaseForm
             }
             $this->getInstaller()->setCheckedExtensions($checkedExtensions);
         }
-        
+
         return true;
     }
-    
+
 }

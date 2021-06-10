@@ -1,7 +1,7 @@
 <?php
 /**
  * @link https://github.com/engine-core/module-installation
- * @copyright Copyright (c) 2020 E-Kevin
+ * @copyright Copyright (c) 2021 engine-core
  * @license BSD 3-Clause License
  */
 
@@ -9,7 +9,7 @@
 
 $this->title = '数据库设置';
 $form = \yii\widgets\ActiveForm::begin([
-    'id'      => 'install-form',
+    'id' => 'install-form',
 ]);
 ?>
 

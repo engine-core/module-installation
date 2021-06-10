@@ -1,8 +1,8 @@
 <?php
 /**
- * @link      https://github.com/engine-core/module-installation
- * @copyright Copyright (c) 2020 E-Kevin
- * @license   BSD 3-Clause License
+ * @link https://github.com/engine-core/module-installation
+ * @copyright Copyright (c) 2021 engine-core
+ * @license BSD 3-Clause License
  */
 
 declare(strict_types=1);
@@ -24,17 +24,17 @@ use Yii;
  */
 class ExtensionManageForm extends BaseForm
 {
-    
+
     /**
      * @var array 需要安装的扩展
      */
     public $extension;
-    
+
     /**
      * @var array 扩展将要被安装到的应用
      */
     public $app;
-    
+
     /**
      * {@inheritdoc}
      */
@@ -48,7 +48,7 @@ class ExtensionManageForm extends BaseForm
             ['app', 'checkApp'],
         ];
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -58,7 +58,7 @@ class ExtensionManageForm extends BaseForm
             'extension', 'app',
         ];
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -68,7 +68,7 @@ class ExtensionManageForm extends BaseForm
             'extension' => Yii::t('ec/modules/installation', 'Extension'),
         ];
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -88,17 +88,17 @@ class ExtensionManageForm extends BaseForm
                 foreach ($data['app'] as $uniqueName => $apps) {
                     $data['app'][$uniqueName] = array_unique($apps);
                 }
-                
+
                 return $data;
             };
             $data = ($scope === '')
                 ? $uniqueFunc($data)
                 : [$scope => $uniqueFunc($data[$scope])];
         }
-        
+
         return parent::load($data, $formName);
     }
-    
+
     /**
      * 保存
      *
@@ -116,7 +116,7 @@ class ExtensionManageForm extends BaseForm
                 if (!isset($disabledExtension[$uniqueName])) {
                     $data[$uniqueName] = [
                         'version' => isset($configuration[$uniqueName]) ? $configuration[$uniqueName]->getVersion() : '*',
-                        'app'     => $this->app[$uniqueName],
+                        'app' => $this->app[$uniqueName],
                     ];
                 } else {
                     foreach ($this->app[$uniqueName] as $app) {
@@ -128,15 +128,15 @@ class ExtensionManageForm extends BaseForm
                     }
                 }
             }
-            
+
             $this->getInstaller()->setCheckedExtensions($data);
-            
+
             return true;
         }
-        
+
         return false;
     }
-    
+
     /**
      * 解析扩展数据，转换为模型内属性格式的数组
      *
@@ -165,10 +165,10 @@ class ExtensionManageForm extends BaseForm
                 $data['app'][$uniqueName] = $row['app'];
             }
         }
-        
+
         return $data;
     }
-    
+
     /**
      * 检查需要安装的扩展
      *
@@ -182,7 +182,7 @@ class ExtensionManageForm extends BaseForm
         $typeTheme = 0; // 主题数量
         $backendHomeNum = 0; // 后台主页扩展数量
         $systemConfigNum = 0; // 系统配置扩展数量
-        
+
         foreach ($this->extension as $key => $uniqueName) {
             // 本地不存在的扩展暂不剔除，用于提示下载扩展
             if (!isset($configuration[$uniqueName])) {
@@ -212,7 +212,7 @@ class ExtensionManageForm extends BaseForm
                         if (isset($this->app[$uniqueName]) && !in_array(AppEnum::BACKEND, $this->app[$uniqueName])) {
                             $this->addError($attribute, Yii::t('ec/modules/installation',
                                 'Backend application environment must be preselected for extension management module.', [
-                                    'extension'   => $uniqueName,
+                                    'extension' => $uniqueName,
                                     'backend_app' => AppEnum::value(AppEnum::BACKEND),
                                 ]));
                         }
@@ -240,7 +240,7 @@ class ExtensionManageForm extends BaseForm
             $this->addError($attribute, Yii::t('ec/modules/installation',
                 'At least one extension of the system core configuration needs to be installed.'));
         }
-        
+
         // 扩展管理分类
         if ($categoryExtensionNum > 1) {
             $this->addError($attribute, Yii::t('ec/modules/installation',
@@ -250,7 +250,7 @@ class ExtensionManageForm extends BaseForm
             $this->addError($attribute, Yii::t('ec/modules/installation',
                 'At least one extension of the extension management category needs to be installed.'));
         }
-        
+
         // 后台主页
         if ($backendHomeNum > 1) {
             $this->addError($attribute, Yii::t('ec/modules/installation',
@@ -260,14 +260,14 @@ class ExtensionManageForm extends BaseForm
             $this->addError($attribute, Yii::t('ec/modules/installation',
                 'You need to install at least one extension of the backend home page category.'));
         }
-        
+
         // 主题类型
         if ($typeTheme < 1) {
             $this->addError($attribute, Yii::t('ec/modules/installation',
                 'At least one extension of the theme type needs to be installed.'));
         }
     }
-    
+
     /**
      * 检查扩展能被安装的应用环境
      *
@@ -293,12 +293,12 @@ class ExtensionManageForm extends BaseForm
                         $this->addError($attribute, Yii::t('ec/modules/installation',
                             'The extension cannot be installed in the app.', [
                                 'extension' => $uniqueName,
-                                'app'       => $app,
+                                'app' => $app,
                             ]));
                     }
                 }
             }
         }
     }
-    
+
 }

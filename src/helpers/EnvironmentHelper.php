@@ -1,7 +1,7 @@
 <?php
 /**
  * @link https://github.com/engine-core/module-installation
- * @copyright Copyright (c) 2020 E-Kevin
+ * @copyright Copyright (c) 2021 engine-core
  * @license BSD 3-Clause License
  */
 
@@ -23,12 +23,12 @@ require_once(Yii::getAlias("@vendor/yiisoft/yii2/requirements/YiiRequirementChec
  */
 class EnvironmentHelper extends BaseObject
 {
-    
+
     /**
      * @var YiiRequirementChecker
      */
     public $checker;
-    
+
     /**
      * {@inheritdoc}
      */
@@ -38,12 +38,12 @@ class EnvironmentHelper extends BaseObject
         $this->checker->checkYii();
         $this->checker->check($this->requirements());
     }
-    
+
     protected function requirements()
     {
         $gdMemo = $imagickMemo = 'Either GD PHP extension with FreeType support or ImageMagick PHP extension with PNG support is required for image CAPTCHA.';
         $gdOK = $imagickOK = false;
-        
+
         if (extension_loaded('imagick')) {
             $imagick = new Imagick();
             $imagickFormats = $imagick->queryFormats('PNG');
@@ -53,7 +53,7 @@ class EnvironmentHelper extends BaseObject
                 $imagickMemo = 'Imagick extension should be installed with PNG support in order to be used for image CAPTCHA.';
             }
         }
-        
+
         if (extension_loaded('gd')) {
             $gdInfo = gd_info();
             if (!empty($gdInfo['FreeType Support'])) {
@@ -62,88 +62,88 @@ class EnvironmentHelper extends BaseObject
                 $gdMemo = 'GD extension should be installed with FreeType support in order to be used for image CAPTCHA.';
             }
         }
-        
+
         return [
             // Database :
             [
-                'name'      => 'PDO extension',
+                'name' => 'PDO extension',
                 'mandatory' => true,
                 'condition' => extension_loaded('pdo'),
-                'by'        => 'All DB-related classes',
+                'by' => 'All DB-related classes',
             ],
             [
-                'name'      => 'PDO SQLite extension',
+                'name' => 'PDO SQLite extension',
                 'mandatory' => false,
                 'condition' => extension_loaded('pdo_sqlite'),
-                'by'        => 'All DB-related classes',
-                'memo'      => 'Required for SQLite database.',
+                'by' => 'All DB-related classes',
+                'memo' => 'Required for SQLite database.',
             ],
             [
-                'name'      => 'PDO MySQL extension',
+                'name' => 'PDO MySQL extension',
                 'mandatory' => false,
                 'condition' => extension_loaded('pdo_mysql'),
-                'by'        => 'All DB-related classes',
-                'memo'      => 'Required for MySQL database.',
+                'by' => 'All DB-related classes',
+                'memo' => 'Required for MySQL database.',
             ],
             [
-                'name'      => 'PDO PostgreSQL extension',
+                'name' => 'PDO PostgreSQL extension',
                 'mandatory' => false,
                 'condition' => extension_loaded('pdo_pgsql'),
-                'by'        => 'All DB-related classes',
-                'memo'      => 'Required for PostgreSQL database.',
+                'by' => 'All DB-related classes',
+                'memo' => 'Required for PostgreSQL database.',
             ],
             // Cache :
             [
-                'name'      => 'Memcache extension',
+                'name' => 'Memcache extension',
                 'mandatory' => false,
                 'condition' => extension_loaded('memcache') || extension_loaded('memcached'),
-                'by'        => '<a href="http://www.yiiframework.com/doc-2.0/yii-caching-memcache.html">MemCache</a>',
-                'memo'      => extension_loaded('memcached') ? 'To use memcached set <a href="http://www.yiiframework.com/doc-2.0/yii-caching-memcache.html#$useMemcached-detail">MemCache::useMemcached</a> to <code>true</code>.' : '',
+                'by' => '<a href="http://www.yiiframework.com/doc-2.0/yii-caching-memcache.html">MemCache</a>',
+                'memo' => extension_loaded('memcached') ? 'To use memcached set <a href="http://www.yiiframework.com/doc-2.0/yii-caching-memcache.html#$useMemcached-detail">MemCache::useMemcached</a> to <code>true</code>.' : '',
             ],
             [
-                'name'      => 'APC extension',
+                'name' => 'APC extension',
                 'mandatory' => false,
                 'condition' => extension_loaded('apc'),
-                'by'        => '<a href="http://www.yiiframework.com/doc-2.0/yii-caching-apccache.html">ApcCache</a>',
+                'by' => '<a href="http://www.yiiframework.com/doc-2.0/yii-caching-apccache.html">ApcCache</a>',
             ],
             // CAPTCHA:
             [
-                'name'      => 'GD PHP extension with FreeType support',
+                'name' => 'GD PHP extension with FreeType support',
                 'mandatory' => false,
                 'condition' => $gdOK,
-                'by'        => '<a href="http://www.yiiframework.com/doc-2.0/yii-captcha-captcha.html">Captcha</a>',
-                'memo'      => $gdMemo,
+                'by' => '<a href="http://www.yiiframework.com/doc-2.0/yii-captcha-captcha.html">Captcha</a>',
+                'memo' => $gdMemo,
             ],
             [
-                'name'      => 'ImageMagick PHP extension with PNG support',
+                'name' => 'ImageMagick PHP extension with PNG support',
                 'mandatory' => false,
                 'condition' => $imagickOK,
-                'by'        => '<a href="http://www.yiiframework.com/doc-2.0/yii-captcha-captcha.html">Captcha</a>',
-                'memo'      => $imagickMemo,
+                'by' => '<a href="http://www.yiiframework.com/doc-2.0/yii-captcha-captcha.html">Captcha</a>',
+                'memo' => $imagickMemo,
             ],
             // PHP ini :
-            'phpExposePhp'       => [
-                'name'      => 'Expose PHP',
+            'phpExposePhp' => [
+                'name' => 'Expose PHP',
                 'mandatory' => false,
                 'condition' => $this->checker->checkPhpIniOff("expose_php"),
-                'by'        => 'Security reasons',
-                'memo'      => '"expose_php" should be disabled at php.ini',
+                'by' => 'Security reasons',
+                'memo' => '"expose_php" should be disabled at php.ini',
             ],
             'phpAllowUrlInclude' => [
-                'name'      => 'PHP allow url include',
+                'name' => 'PHP allow url include',
                 'mandatory' => false,
                 'condition' => $this->checker->checkPhpIniOff("allow_url_include"),
-                'by'        => 'Security reasons',
-                'memo'      => '"allow_url_include" should be disabled at php.ini',
+                'by' => 'Security reasons',
+                'memo' => '"allow_url_include" should be disabled at php.ini',
             ],
-            'phpSmtp'            => [
-                'name'      => 'PHP mail SMTP',
+            'phpSmtp' => [
+                'name' => 'PHP mail SMTP',
                 'mandatory' => false,
                 'condition' => strlen(ini_get('SMTP')) > 0,
-                'by'        => 'Email sending',
-                'memo'      => 'PHP mail SMTP server required',
+                'by' => 'Email sending',
+                'memo' => 'PHP mail SMTP server required',
             ],
         ];
     }
-    
+
 }

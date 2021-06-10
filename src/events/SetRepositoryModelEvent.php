@@ -1,7 +1,7 @@
 <?php
 /**
  * @link https://github.com/engine-core/module-installation
- * @copyright Copyright (c) 2020 E-Kevin
+ * @copyright Copyright (c) 2021 engine-core
  * @license BSD 3-Clause License
  */
 
@@ -19,22 +19,22 @@ use yii\base\Event;
  */
 class SetRepositoryModelEvent extends Event
 {
-    
+
     /**
      * @var InstallHelperTrait
      */
     public $sender;
-    
+
     /**
      * 配置扩展仓库模型
      *
      * @param self $event
      */
-    public function setModel($event)
+    static public function setModel($event)
     {
         if (null !== $info = $event->sender->getInstaller()->getExtensionModuleInfo()) {
             $info->setRepositoryModel();
         }
     }
-    
+
 }

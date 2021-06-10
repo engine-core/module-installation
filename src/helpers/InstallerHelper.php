@@ -1,8 +1,8 @@
 <?php
 /**
- * @link      https://github.com/engine-core/module-installation
- * @copyright Copyright (c) 2020 E-Kevin
- * @license   BSD 3-Clause License
+ * @link https://github.com/engine-core/module-installation
+ * @copyright Copyright (c) 2021 engine-core
+ * @license BSD 3-Clause License
  */
 
 declare(strict_types=1);
@@ -33,35 +33,35 @@ use yii\helpers\Console;
 /**
  * Class InstallerHelper
  *
- * @property Connection                       $db                  数据库连接组件，可读写
- * @property string                           $lockFile            安装锁文件，可读写
- * @property string                           $licenseFile         授权协议文件，可读写
- * @property array                            $tables              储存扩展的数据表数据，可读写
- * @property array                            $checkedExtensions   已经选择的扩展，可读写
- * @property array                            $defaultExtensions   默认需要安装的扩展，可读写
+ * @property Connection $db                  数据库连接组件，可读写
+ * @property string $lockFile            安装锁文件，可读写
+ * @property string $licenseFile         授权协议文件，可读写
+ * @property array $tables              储存扩展的数据表数据，可读写
+ * @property array $checkedExtensions   已经选择的扩展，可读写
+ * @property array $defaultExtensions   默认需要安装的扩展，可读写
  * @property ExtensionInterface|ExtensionInfo $extensionModuleInfo 扩展管理模块信息类，只读
- * @property string                           $extensionCategory   当前已安装的扩展管理分类的扩展名，可读写
+ * @property string $extensionCategory   当前已安装的扩展管理分类的扩展名，可读写
  *
  * @author E-Kevin <e-kevin@qq.com>
  */
 class InstallerHelper extends BaseObject
 {
-    
+
     /**
      * @var bool 是否控制台应用
      */
     private $_isConsoleApp = false;
-    
+
     /**
      * {@inheritdoc}
      */
     public function init()
     {
         parent::init();
-        
+
         $this->_isConsoleApp = Yii::$app instanceof Application;
     }
-    
+
     /**
      * 检查是否已经安装
      *
@@ -71,7 +71,7 @@ class InstallerHelper extends BaseObject
     {
         return is_file($this->getLockFile());
     }
-    
+
     /**
      * 移除安装锁文件
      *
@@ -81,7 +81,7 @@ class InstallerHelper extends BaseObject
     {
         return FileHelper::removeFile($this->getLockFile());
     }
-    
+
     /**
      * 创建安装锁定文件
      *
@@ -91,12 +91,12 @@ class InstallerHelper extends BaseObject
     {
         return FileHelper::createFile($this->getLockFile(), 'Lock at ' . date('Y-m-d H:i:s'));
     }
-    
+
     /**
      * @var string 安装锁文件
      */
     private $_lockFile;
-    
+
     /**
      * 获取安装锁文件
      *
@@ -107,10 +107,10 @@ class InstallerHelper extends BaseObject
         if (null === $this->_lockFile) {
             $this->setLockFile('@common/install.lock');
         }
-        
+
         return $this->_lockFile;
     }
-    
+
     /**
      * 设置安装锁文件
      *
@@ -120,12 +120,12 @@ class InstallerHelper extends BaseObject
     {
         $this->_lockFile = Yii::getAlias($lockFile);
     }
-    
+
     /**
      * @var string 授权协议文件
      */
     private $_licenseFile;
-    
+
     /**
      * 获取授权协议文件
      *
@@ -136,10 +136,10 @@ class InstallerHelper extends BaseObject
         if (null === $this->_licenseFile) {
             $this->setLicenseFile('@root/LICENSE.md');
         }
-        
+
         return $this->_licenseFile;
     }
-    
+
     /**
      * 设置授权协议文件
      *
@@ -149,12 +149,12 @@ class InstallerHelper extends BaseObject
     {
         $this->_licenseFile = Yii::getAlias($licenseFile);
     }
-    
+
     /**
      * @var array 储存扩展的数据表数据
      */
     private $_tables;
-    
+
     /**
      * 获取储存扩展的数据库表数据
      *
@@ -165,10 +165,10 @@ class InstallerHelper extends BaseObject
         if (null === $this->_tables) {
             $this->setTables();
         }
-        
+
         return $this->_tables;
     }
-    
+
     /**
      * 设置储存扩展的数据库表数据
      *
@@ -178,21 +178,21 @@ class InstallerHelper extends BaseObject
     {
         $this->_tables = array_merge([
             // 模块扩展数据表
-            ExtensionInfo::TYPE_MODULE     => MigrationHelper::createTableName('module', ExtensionInfo::EXT_RAND_CODE),
+            ExtensionInfo::TYPE_MODULE => MigrationHelper::createTableName('module', ExtensionInfo::EXT_RAND_CODE),
             // 控制器扩展数据表
             ExtensionInfo::TYPE_CONTROLLER => MigrationHelper::createTableName('controller', ExtensionInfo::EXT_RAND_CODE),
             // 主题扩展数据表
-            ExtensionInfo::TYPE_THEME      => MigrationHelper::createTableName('theme', ExtensionInfo::EXT_RAND_CODE),
+            ExtensionInfo::TYPE_THEME => MigrationHelper::createTableName('theme', ExtensionInfo::EXT_RAND_CODE),
             // 系统配置扩展数据表
-            ExtensionInfo::TYPE_CONFIG     => MigrationHelper::createTableName('config', ExtensionInfo::EXT_RAND_CODE),
+            ExtensionInfo::TYPE_CONFIG => MigrationHelper::createTableName('config', ExtensionInfo::EXT_RAND_CODE),
         ], $tables);
     }
-    
+
     /**
      * @var array 默认需要安装的扩展
      */
     private $_defaultExtensions;
-    
+
     /**
      * 获取默认需要安装的扩展
      *
@@ -202,7 +202,7 @@ class InstallerHelper extends BaseObject
     {
         return $this->_defaultExtensions;
     }
-    
+
     /**
      * 设置默认需要安装的扩展
      *
@@ -226,12 +226,12 @@ class InstallerHelper extends BaseObject
     {
         $this->_defaultExtensions = Ec::$service->getExtension()->getDependent()->normalize($defaultExtensions);
     }
-    
+
     /**
      * @var array 已经选择的扩展
      */
     private $_extensions;
-    
+
     /**
      * 获取已经选择的扩展，包含默认需要安装、已经安装和自选的扩展
      *
@@ -242,14 +242,14 @@ class InstallerHelper extends BaseObject
         if (null === $this->_extensions) {
             $this->_extensions = $this->cache()->getOrSet(Module::CACHE_CHECKED_EXTENSION, function () {
                 $this->setCheckedExtensions([]);
-                
+
                 return $this->_extensions;
             });
         }
-        
+
         return $this->_extensions;
     }
-    
+
     /**
      * 设置已经选择的扩展
      *
@@ -271,9 +271,9 @@ class InstallerHelper extends BaseObject
         $this->_extensions = $checkedExtensions;
         $this->cache()->set(Module::CACHE_CHECKED_EXTENSION, $this->_extensions);
     }
-    
+
     private $_disabledExtensions;
-    
+
     /**
      * 获取禁止选择的扩展，包含默认需要安装和已经安装的扩展，并以数据库数据为准
      *
@@ -300,10 +300,10 @@ class InstallerHelper extends BaseObject
                 }
             }
         }
-        
+
         return $this->_disabledExtensions;
     }
-    
+
     /**
      * 验证需要安装的扩展是否满足依赖关系
      *
@@ -313,7 +313,7 @@ class InstallerHelper extends BaseObject
     {
         return Ec::$service->getExtension()->getDependent()->validate($this->getCheckedExtensions());
     }
-    
+
     /**
      * 获取没有安装的扩展，必须在执行前确保已经进行了依赖关系检测
      * @see \EngineCore\services\Extension\Dependent::validate()
@@ -334,15 +334,15 @@ class InstallerHelper extends BaseObject
                 }
             }
         }
-        
+
         return $unInstallExtension;
     }
-    
+
     /**
      * @var Connection
      */
     private $_db;
-    
+
     /**
      * 获取数据库连接组件
      *
@@ -353,10 +353,10 @@ class InstallerHelper extends BaseObject
         if (null === $this->_db) {
             $this->setDb('db');
         }
-        
+
         return $this->_db;
     }
-    
+
     /**
      * 设置数据库连接组件
      *
@@ -366,7 +366,7 @@ class InstallerHelper extends BaseObject
     {
         $this->_db = Instance::ensure($db, Connection::class);
     }
-    
+
     /**
      * 把需要安装的扩展写入扩展仓库数据库，并执行扩展内的`install()`安装方法
      *
@@ -381,7 +381,7 @@ class InstallerHelper extends BaseObject
         if (empty($unInstallExtension)) {
             return !empty($this->getExtensionCategory());
         }
-        
+
         /**
          * 初始化扩展安装环境
          *
@@ -399,7 +399,7 @@ class InstallerHelper extends BaseObject
                         "\n====== The extension installation environment has been initialized successfully ======\n\n",
                         Console::FG_YELLOW);
                 }
-                
+
                 return true;
             }
             if ($this->_isConsoleApp) {
@@ -429,14 +429,14 @@ class InstallerHelper extends BaseObject
             if ($this->_isConsoleApp) {
                 $consoleController->stdout("\n");
             }
-            
+
             return $res;
         };
-        
+
         if (false === $initialize()) {
             return false;
         }
-        
+
         /**
          * 把需要安装的扩展添加进数据库里
          */
@@ -456,11 +456,11 @@ class InstallerHelper extends BaseObject
                     $consoleController->stdout(sprintf($running, get_class($infoInstance), $infoInstance->getApp()));
                     if ($infoInstance->install()) {
                         $consoleController->stdout(sprintf($endingSuccessful, get_class($infoInstance), 'Successful'));
-                        
+
                         return true;
                     } else {
                         $consoleController->stdout(sprintf($endingFailed, get_class($infoInstance), 'Failed'));
-                        
+
                         return false;
                     }
                 } else {
@@ -471,21 +471,21 @@ class InstallerHelper extends BaseObject
              * 构建待写入数据库里的扩展配置数据
              *
              * @param ExtensionInfo $infoInstance
-             * @param array         $append
+             * @param array $append
              *
              * @return array
              */
             $build = function (ExtensionInfo $infoInstance, $append = []): array {
                 return array_merge([
-                    'unique_id'   => $infoInstance->getUniqueId(),
+                    'unique_id' => $infoInstance->getUniqueId(),
                     'unique_name' => $infoInstance->getUniqueName(),
-                    'is_system'   => YesEnum::YES, // 默认安装的扩展标记为系统扩展
-                    'status'      => StatusEnum::STATUS_ON,
-                    'run'         => ExtensionInfo::RUN_MODULE_EXTENSION, // 默认安装的扩展运行模式为系统扩展
-                    'version'     => $infoInstance->getConfiguration()->getVersion(),
-                    'category'    => $infoInstance->getCategory(),
-                    'app'         => $infoInstance->getApp(),
-                    'created_at'  => time(),
+                    'is_system' => YesEnum::YES, // 默认安装的扩展标记为系统扩展
+                    'status' => StatusEnum::STATUS_ON,
+                    'run' => ExtensionInfo::RUN_MODULE_EXTENSION, // 默认安装的扩展运行模式为系统扩展
+                    'version' => $infoInstance->getConfiguration()->getVersion(),
+                    'category' => $infoInstance->getCategory(),
+                    'app' => $infoInstance->getApp(),
+                    'created_at' => time(),
                 ], $append);
             };
             // 待写入数据库里的扩展配置数据
@@ -502,7 +502,7 @@ class InstallerHelper extends BaseObject
                         case ExtensionInfo::TYPE_CONTROLLER:
                             /** @var ControllerInfo $infoInstance */
                             $data = $build($infoInstance, [
-                                'module_id'     => $infoInstance->getModuleId(),
+                                'module_id' => $infoInstance->getModuleId(),
                                 'controller_id' => $infoInstance->getId(),
                             ]);
                             break;
@@ -522,20 +522,20 @@ class InstallerHelper extends BaseObject
                             $data = $build($infoInstance);
                             break;
                     }
-                    
+
                     if ($runExtensionInstall($infoInstance)) {
                         $command->upsert($this->tables[$infoInstance->getType()], $data, false)->execute();
                     }
                 }
             }
         };
-        
+
         // 安装扩展
         $installExtension();
-        
+
         return true;
     }
-    
+
     /**
      * 获取已经安装的扩展管理模块信息类
      *
@@ -548,10 +548,10 @@ class InstallerHelper extends BaseObject
         if (!empty($uniqueName = $this->getExtensionCategory())) {
             $infoInstance = Ec::$service->getExtension()->getRepository()->getLocalConfiguration()[AppEnum::BACKEND][$uniqueName];
         }
-        
+
         return $infoInstance;
     }
-    
+
     /**
      * 初始化运行环境
      *
@@ -576,13 +576,13 @@ class InstallerHelper extends BaseObject
         if ($this->_isConsoleApp) {
             $consoleController->stdout("====== Initialize the environment as '{$environment}' ======\n\n", Console::FG_YELLOW);
         }
-        
+
         //执行
         return ConsoleHelper::run(sprintf("%s --env={$environment} --overwrite=y",
             Yii::getAlias(ConsoleHelper::getCommander('init'))
         ));
     }
-    
+
     /**
      * 获取需要安装的扩展管理分类的扩展名
      *
@@ -592,7 +592,7 @@ class InstallerHelper extends BaseObject
     {
         return $this->cache()->get(Module::CACHE_EXTENSION_CATEGORY) ?: '';
     }
-    
+
     /**
      * 设置需要安装的扩展管理分类的扩展名
      *
@@ -602,7 +602,7 @@ class InstallerHelper extends BaseObject
     {
         $this->cache()->set(Module::CACHE_EXTENSION_CATEGORY, $uniqueName);
     }
-    
+
     /**
      * 缓存组件
      *
@@ -612,5 +612,5 @@ class InstallerHelper extends BaseObject
     {
         return Ec::$service->getSystem()->getCache()->getComponent();
     }
-    
+
 }

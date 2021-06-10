@@ -1,7 +1,7 @@
 <?php
 /**
  * @link https://github.com/engine-core/module-installation
- * @copyright Copyright (c) 2020 E-Kevin
+ * @copyright Copyright (c) 2021 engine-core
  * @license BSD 3-Clause License
  */
 
@@ -31,27 +31,27 @@ $this->title = '扩展中心';
 <?php
 $columns = [
     [
-        'class'            => CheckboxColumn::class,
-        'name'             => Html::getInputName($model, 'extension'),
-        'checkboxOptions'  => function ($model, $key, $index, $column) {
+        'class' => CheckboxColumn::class,
+        'name' => Html::getInputName($model, 'extension'),
+        'checkboxOptions' => function ($model, $key, $index, $column) {
             $options['checked'] = $model['checked'];
             $options['disabled'] = $model['disabled'];
-            
+
             return $options;
         },
         'rowSelectedClass' => GridView::TYPE_SUCCESS,
     ],
     [
-        'label'     => '名称',
+        'label' => '名称',
         'attribute' => 'name',
     ],
     [
-        'label'     => '描述',
+        'label' => '描述',
         'attribute' => 'description',
     ],
     [
-        'label'          => '当前版本',
-        'attribute'      => 'version',
+        'label' => '当前版本',
+        'attribute' => 'version',
         'contentOptions' => [
             'style' => 'text-align:center;',
         ],
@@ -60,12 +60,12 @@ $columns = [
 
 foreach (AppEnum::list() as $app => $title) {
     $columns[] = [
-        'label'          => $title,
-        'format'         => 'raw',
+        'label' => $title,
+        'format' => 'raw',
         'contentOptions' => [
             'style' => 'text-align:center;',
         ],
-        'value'          => function ($m, $key, $index, $column) use ($app, $model) {
+        'value' => function ($m, $key, $index, $column) use ($app, $model) {
             /** @var Configuration $m */
             $html = '';
             if (in_array($app, $m['app'])) {
@@ -75,14 +75,14 @@ foreach (AppEnum::list() as $app => $title) {
                 $options['disabled'] = in_array($app, $m['disabledApp']);
                 $html = Html::checkbox($name, false, $options);
             }
-            
+
             return $html;
         },
     ];
 }
 
 $dataProvider = new ArrayDataProvider([
-    'allModels'  => $extensions,
+    'allModels' => $extensions,
     'pagination' => [
         'pageSize' => -1, //不使用分页
     ],
@@ -93,13 +93,13 @@ $form = \yii\widgets\ActiveForm::begin([
 ]);
 
 echo GridView::widget([
-    'dataProvider'     => $dataProvider,
-    'layout'           => "{items}",
-    'emptyText'        => '不存在任何扩展',
-    'hover'            => true,
-    'bordered'         => false,
+    'dataProvider' => $dataProvider,
+    'layout' => "{items}",
+    'emptyText' => '不存在任何扩展',
+    'hover' => true,
+    'bordered' => false,
     'emptyTextOptions' => ['class' => 'text-center text-muted'],
-    'columns'          => $columns,
+    'columns' => $columns,
 ]);
 
 \yii\widgets\ActiveForm::end();
@@ -111,38 +111,38 @@ echo GridView::widget([
             <small>以下为需要下载的扩展</small>
         </h1>
     </div>
-    
+
     <?php
     $dataProvider = new ArrayDataProvider([
-        'allModels'  => $download,
+        'allModels' => $download,
         'pagination' => [
             'pageSize' => -1, //不使用分页
         ],
     ]);
-    
+
     $columns = [
         [
-            'label'     => '名称',
+            'label' => '名称',
             'attribute' => 'name',
         ],
         [
-            'label'     => '请求主体',
+            'label' => '请求主体',
             'attribute' => 'parent',
         ],
         [
-            'label'     => '版本规则',
+            'label' => '版本规则',
             'attribute' => 'version',
         ],
     ];
-    
+
     echo GridView::widget([
-        'dataProvider'     => $dataProvider,
-        'layout'           => "{items}",
-        'emptyText'        => '不存在任何扩展',
-        'hover'            => true,
-        'bordered'         => false,
+        'dataProvider' => $dataProvider,
+        'layout' => "{items}",
+        'emptyText' => '不存在任何扩展',
+        'hover' => true,
+        'bordered' => false,
         'emptyTextOptions' => ['class' => 'text-center text-muted'],
-        'columns'          => $columns,
+        'columns' => $columns,
     ]);
     ?>
 <?php endif; ?>
@@ -153,34 +153,34 @@ echo GridView::widget([
             <small>以下扩展存在无限循环依赖关系</small>
         </h1>
     </div>
-    
+
     <?php
     $dataProvider = new ArrayDataProvider([
-        'allModels'  => $circular,
+        'allModels' => $circular,
         'pagination' => [
             'pageSize' => -1, //不使用分页
         ],
     ]);
-    
+
     $columns = [
         [
-            'label'     => '名称',
+            'label' => '名称',
             'attribute' => 'name',
         ],
         [
-            'label'     => '依赖链',
+            'label' => '依赖链',
             'attribute' => 'chain',
         ],
     ];
-    
+
     echo GridView::widget([
-        'dataProvider'     => $dataProvider,
-        'layout'           => "{items}",
-        'emptyText'        => '不存在任何扩展',
-        'hover'            => true,
-        'bordered'         => false,
+        'dataProvider' => $dataProvider,
+        'layout' => "{items}",
+        'emptyText' => '不存在任何扩展',
+        'hover' => true,
+        'bordered' => false,
         'emptyTextOptions' => ['class' => 'text-center text-muted'],
-        'columns'          => $columns,
+        'columns' => $columns,
     ]);
     ?>
 <?php endif; ?>
@@ -191,38 +191,38 @@ echo GridView::widget([
             <small>以下扩展存在版本冲突</small>
         </h1>
     </div>
-    
+
     <?php
     $dataProvider = new ArrayDataProvider([
-        'allModels'  => $conflict,
+        'allModels' => $conflict,
         'pagination' => [
             'pageSize' => -1, //不使用分页
         ],
     ]);
-    
+
     $columns = [
         [
-            'label'     => '名称',
+            'label' => '名称',
             'attribute' => 'name',
         ],
         [
-            'label'     => '版本规则',
+            'label' => '版本规则',
             'attribute' => 'requireVersion',
         ],
         [
-            'label'     => '当前版本',
+            'label' => '当前版本',
             'attribute' => 'version',
         ],
     ];
-    
+
     echo GridView::widget([
-        'dataProvider'     => $dataProvider,
-        'layout'           => "{items}",
-        'emptyText'        => '不存在任何扩展',
-        'hover'            => true,
-        'bordered'         => false,
+        'dataProvider' => $dataProvider,
+        'layout' => "{items}",
+        'emptyText' => '不存在任何扩展',
+        'hover' => true,
+        'bordered' => false,
         'emptyTextOptions' => ['class' => 'text-center text-muted'],
-        'columns'          => $columns,
+        'columns' => $columns,
     ]);
     ?>
 <?php endif; ?>

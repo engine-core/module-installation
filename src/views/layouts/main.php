@@ -1,7 +1,7 @@
 <?php
 /**
  * @link https://github.com/engine-core/module-installation
- * @copyright Copyright (c) 2020 E-Kevin
+ * @copyright Copyright (c) 2021 engine-core
  * @license BSD 3-Clause License
  */
 
@@ -16,7 +16,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\Menu;
 
-\EngineCore\modules\installation\InstallAsset::register($this);
+\EngineCore\modules\installation\InstallationAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -28,18 +28,18 @@ use yii\widgets\Menu;
     ]);
     $this->registerMetaTag([
         'http-equiv' => 'X-UA-Compatible',
-        'content'    => 'IE=edge',
+        'content' => 'IE=edge',
     ]);
     $this->registerMetaTag([
-        'name'    => 'viewport',
+        'name' => 'viewport',
         'content' => 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no',
     ]);
     $this->registerMetaTag([
-        'name'    => 'description',
+        'name' => 'description',
         'content' => Html::encode(Ec::$service->getSystem()->getSetting()->get('SITE_DESCRIPTION')),
     ], 'description');
     $this->registerMetaTag([
-        'name'    => 'keywords',
+        'name' => 'keywords',
         'content' => Html::encode(Ec::$service->getSystem()->getSetting()->get('SITE_KEYWORD')),
     ], 'keywords');
     echo Html::csrfMetaTags();
@@ -75,26 +75,26 @@ use yii\widgets\Menu;
 css;
     $this->registerCss($css, ['type' => 'text/css']);
     $this->head();
-    
+
     $items = [];
     foreach ($this->context->getStepFlow() as $k => $v) {
         $items[] = [
-            'label'   => $v['label'],
-            'url'     => $v['url'],
+            'label' => $v['label'],
+            'url' => $v['url'],
             'options' => [
                 'data-url' => Url::to($v['url']),
             ],
         ];
     }
     $menu = [
-        "options"     => [
+        "options" => [
             "class" => "list-group",
         ],
         "itemOptions" => [
             "class" => "list-group-item",
         ],
 //        "linkTemplate" => '{label}',
-        "items"       => $items,
+        "items" => $items,
     ];
     ?>
 </head>
@@ -102,9 +102,9 @@ css;
 
 <div class="wrap">
     <?php $this->beginBody() ?>
-    
+
     <?= \yii\bootstrap\Modal::widget([
-        'id'     => 'msgBox',
+        'id' => 'msgBox',
         'header' => '<span class="modal-title">消息提示</span>',
     ]); ?>
 
@@ -152,7 +152,7 @@ css;
                 </div>
             </div>
         </div>
-        
+
         <?php $this->endBody() ?>
     </div>
 </body>

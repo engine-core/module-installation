@@ -1,7 +1,7 @@
 <?php
 /**
  * @link https://github.com/engine-core/module-installation
- * @copyright Copyright (c) 2020 E-Kevin
+ * @copyright Copyright (c) 2021 engine-core
  * @license BSD 3-Clause License
  */
 
@@ -12,21 +12,21 @@ namespace EngineCore\modules\installation;
 use yii\web\AssetBundle;
 
 /**
- * Class InstallAsset
+ * Class InstallationAsset
  *
  * @author E-Kevin <e-kevin@qq.com>
  */
-class InstallAsset extends AssetBundle
+class InstallationAsset extends AssetBundle
 {
-    
+
     public $sourcePath = '@EngineCore/modules/installation/assets';
-    
+
     public $js = [
         'js/install.js',
     ];
-    
+
     public $depends = [
-        'EngineCore\themes\BootstrapV3\assetBundle\SiteAsset',
+        'EngineCore\themes\Basic\assetBundle\SiteAsset',
     ];
-    
+
 }

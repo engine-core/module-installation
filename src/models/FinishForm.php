@@ -1,7 +1,7 @@
 <?php
 /**
  * @link https://github.com/engine-core/module-installation
- * @copyright Copyright (c) 2020 E-Kevin
+ * @copyright Copyright (c) 2021 engine-core
  * @license BSD 3-Clause License
  */
 
@@ -21,7 +21,7 @@ use yii\helpers\Console;
  */
 class FinishForm extends BaseForm
 {
-    
+
     /**
      * 保存，必须在执行前确保已经进行了依赖关系检测，否则会因没有经过检测而导致没有有效的可安装扩展，
      * 最后无法正确创建配置文件
@@ -47,10 +47,10 @@ class FinishForm extends BaseForm
                 return true;
             }
         }
-        
+
         return false;
     }
-    
+
     /**
      * 创建扩展配置文件，只生成已经安装扩展的配置文件
      * @see \EngineCore\console\controllers\ExtensionController::actionFlushConfigFiles()
@@ -81,5 +81,5 @@ class FinishForm extends BaseForm
             Ec::$service->getExtension()->getEnvironment()->flushConfigFiles();
         }
     }
-    
+
 }
