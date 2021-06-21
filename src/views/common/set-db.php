@@ -29,4 +29,4 @@ $form = \yii\widgets\ActiveForm::begin([
         <?= $form->field($model, 'tablePrefix')->textInput() ?>
     </div>
 
-<?php \yii\widgets\ActiveForm::end(); ?>
+<?php $form::end(); ?>

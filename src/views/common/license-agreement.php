@@ -33,4 +33,4 @@ $this->title = '许可协议';
         ); ?>
     </div>
 
-<?php ActiveForm::end(); ?>
+<?php $form::end(); ?>

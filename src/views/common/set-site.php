@@ -31,4 +31,4 @@ $form = \yii\widgets\ActiveForm::begin([
     'maxlength' => 30,
 ]) ?>
 
-<?php \yii\widgets\ActiveForm::end(); ?>
+<?php $form::end(); ?>

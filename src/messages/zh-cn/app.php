@@ -24,20 +24,13 @@ return [
     => '{extension} 扩展管理模块必须实现扩展管理安装向导接口 `{interface}`。',
     'Backend application environment must be preselected for extension management module.'
     => '{extension} 扩展管理模块必须预选【{backend_app}】应用环境。',
-    'Please select the application environment for the extension you want to install.'
-    => '请为需要安装的扩展 {extension} 选择应用环境。',
-    'At least one extension of the system core configuration needs to be installed.'
-    => '至少需要安装一个系统核心配置的扩展。',
-    'You can install up to one extension of the extension management category.'
-    => '最多可以安装一个扩展管理分类的扩展。',
-    'At least one extension of the extension management category needs to be installed.'
-    => '至少需要安装一个扩展管理分类的扩展。',
-    'You can install at most one extension of backend home page category.'
-    => '最多可以安装一个后台主页分类的扩展。',
-    'You need to install at least one extension of the backend home page category.'
-    => '至少需要安装一个后台主页分类的扩展。',
-    'At least one extension of the theme type needs to be installed.'
-    => '至少需要安装一个主题类型的扩展。',
+    'Please select the application environment for the extension you want to install.' => '请为需要安装的扩展 {extension} 选择应用环境。',
+    'At least one extension of the system core configuration needs to be installed.' => '至少需要安装一个系统核心配置的扩展。',
+    'You can install up to one extension of the extension management category.' => '最多可以安装一个扩展管理分类的扩展。',
+    'At least one extension of the extension management category needs to be installed.' => '至少需要安装一个扩展管理分类的扩展。',
+    'You can install at most one extension of backend home page category.' => '最多可以安装一个后台主页分类的扩展。',
+    'You need to install at least one extension of the backend home page category.' => '至少需要安装一个后台主页分类的扩展。',
+    'At least one extension of the theme type needs to be installed.' => '至少需要安装一个主题类型的扩展。',
     'The extension cannot be installed in the app.' => '{extension} 扩展无法安装在 {app} 应用里。',
     // Set Site Form
     'title' => '网站名称',
@@ -55,8 +48,7 @@ return [
     'Extension detail' => '扩展详情',
     'Finish' => '完成',
     // operate
-    'Unable to jump to an unfinished step. Please complete the current step first.'
-    => '无法跳转至未完成的步骤，请先完成当前步骤~',
+    'Unable to jump to an unfinished step. Please complete the current step first.' => '无法跳转至未完成的步骤，请先完成当前步骤~',
     'Agree to the license agreement to continue the installation.' => '同意安装协议才能继续安装！',
     'Please satisfy the extension dependency before proceeding to the next step.'
     => '请先满足扩展依赖关系【无限循环、未下载、版本冲突】再执行下一步操作。',
